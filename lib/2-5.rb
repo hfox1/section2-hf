@@ -2,35 +2,43 @@ class DiaryEntry
   def initialize(title, contents) # title, contents are strings
     @title = title
     @contents = contents 
+    @start_at_word = 0
+    fail "Please enter text" if (@title != @title.to_s)
+    fail "Please add a title" if @title.empty?
+    fail "Please enter text" if (@contents != @contents.to_s)
+    fail "Please add some text" if @contents.empty?
   end
 
   def title
-    fail "Please enter text" if (@title != @title.to_s)
-    fail "Please add a title" if @title.empty?
     @title
   end
 
   def contents
-    fail "Please enter text" if (@contents != @contents.to_s)
-    fail "Please add some text" if @contents.empty?
     @contents
   end
 
   def count_words
-    if @contents.empty?
-     return 0
-    else 
-     @contents.split(" ").length
-     end
-   end      
+     @contents.split(" ").length   
+  end      
 
-  def reading_time(wpm) # wpm is an integer representing the number of words the
-                        # user can read per minute
-    # Returns an integer representing an estimate of the reading time in minutes
-    # for the contents at the given wpm.
+  def reading_time(wpm)
+    fail "wpm must be a number" if !wpm.is_a?(Numeric)
+    fail "wpm cannot be 0" if wpm == 0 
+    word_count = @contents.split(" ").length
+    minutes = word_count.to_f / wpm
+    minutes.round  
   end
 
-  def reading_chunk(wpm, minutes) # `wpm` is an integer representing the number
+  
+  def reading_chunk(wpm, minutes) 
+    chunksize = wpm * minutes
+    chunk = @contents.split(" ")[@start_at_word, @start_at_word + chunksize].join(" ")
+    @start_at_word += chunksize
+    chunk
+  end
+
+
+                                  # `wpm` is an integer representing the number
                                   # of words the user can read per minute
                                   # `minutes` is an integer representing the
                                   # number of minutes the user has to read
@@ -39,5 +47,5 @@ class DiaryEntry
     # If called again, `reading_chunk` should return the next chunk, skipping
     # what has already been read, until the contents is fully read.
     # The next call after that it should restart from the beginning.
-  end
+  
 end
