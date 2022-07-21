@@ -3,8 +3,12 @@ def get_most_common_letter(text)
   text.chars.each do |char|
     counter[char] += 1
   end
-  counter.to_a.sort_by { |k, v| v }[0][0]
+  sorted_counter = counter.to_a.sort_by { |k, v| v }.reverse!
+  sorted_counter[0][0]
 end
+
+p get_most_common_letter("roof roof")
+
 
 # Intended output:
 # 
