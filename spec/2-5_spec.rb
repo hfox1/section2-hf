@@ -74,6 +74,8 @@ RSpec.describe DiaryEntry do
   teststring = Array.new(200,"water").join(" ")
   teststring2 = Array.new(100,"water").join(" ")
   teststring3 = Array.new(550,"water").join(" ")
+  teststring4 = (1..900).to_a.map! { |x| x.to_s}.join(" ")
+
   
   it "outputs one minute for 200 words at 200wpm" do
     entry = DiaryEntry.new("title", teststring)
@@ -106,9 +108,14 @@ RSpec.describe DiaryEntry do
   end
   
   # 2.1
-  it "subsequent chunk should not contain passage longer than 50 words of previous one" do
-    entry = DiaryEntry.new("title", teststring3)
-
+  it "final 5 words of chunk1 + first 5 words of consecutive chunk = 10 word chunk starting 5 before the end of chunk1 " do
+    entry = DiaryEntry.new("title", teststring4)
+    chunk1 = reading_chunk(200, 2)
+    chunk2 = reading_chunk(200, 2)
+    last_5_of_chunk1 = chunk1[ (chunk1.length - 4), (chunk1.length + 1) ]
+    first_5_of_chunk2 = chunk2[0, 5]
+    # last_20_of_chunk1 == first_20_of_chunk2
+  end
 end
 
 
