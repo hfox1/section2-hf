@@ -125,8 +125,21 @@ RSpec.describe DiaryEntry do
     expect(entry.reading_chunk(300, 1)).to eq teststring2
   end
 
-  # 3 
-  # it "when reaching end of text, starts again at the begining" do 
+  # 3.1   returns any remaining text and terminates 
+  it "returns any remaining text (smaller than the chunksize)" do 
+    entry = DiaryEntry.new("title", "#{teststring} blah")
+    expect(entry.reading_chunk(200, 1)).to eq teststring
+    expect(entry.reading_chunk(300, 1)).to eq "blah"
+  end
+
+  # 3.2   starts from the beginning once it's reached the end 
+  it "returns the first chunk again" do
+    entry = DiaryEntry.new("title", "#{teststring} #{teststring2}")
+    expect(entry.reading_chunk(200, 1)).to eq teststring
+    expect(entry.reading_chunk(300, 1)).to eq teststring2
+    expect(entry.reading_chunk(200, 1)).to eq teststring
+  end
+
 
 end
 

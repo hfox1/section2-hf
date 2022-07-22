@@ -30,12 +30,19 @@ class DiaryEntry
   end
 
   def reading_chunk(wpm, minutes) 
-    p "start at word: #{@start_at_word}" 
+    # p "start at word: #{@start_at_word}" 
 
     chunksize = wpm * minutes
-    p chunk = @contents.split(" ")[@start_at_word, @start_at_word + chunksize].join(" ")
+
+    chunk = @contents.split(" ")[@start_at_word, @start_at_word + chunksize].join(" ")
+    
+    if chunk.empty?
+      @start_at_word = 0
+      chunk = @contents.split(" ")[@start_at_word, @start_at_word + chunksize].join(" ")
+    end
+    
     @start_at_word += chunksize
-    p "start at word: #{@start_at_word}" 
+    # p "start at word: #{@start_at_word}" 
     chunk
   end
 
