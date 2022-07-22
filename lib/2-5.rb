@@ -25,16 +25,15 @@ class DiaryEntry
     fail "wpm must be a number" if !wpm.is_a?(Numeric)
     fail "wpm cannot be 0" if wpm == 0 
     word_count = @contents.split(" ").length
-    minutes = word_count.to_f / wpm
+    minutes = count_words.to_f / wpm
     minutes.round  
   end
 
-  
   def reading_chunk(wpm, minutes) 
     p "start at word: #{@start_at_word}" 
 
-     chunksize = wpm * minutes
-    chunk = @contents.split(" ")[@start_at_word, @start_at_word + chunksize].join(" ")
+    chunksize = wpm * minutes
+    p chunk = @contents.split(" ")[@start_at_word, @start_at_word + chunksize].join(" ")
     @start_at_word += chunksize
     p "start at word: #{@start_at_word}" 
     chunk
@@ -52,3 +51,12 @@ class DiaryEntry
     # The next call after that it should restart from the beginning.
   
 end
+
+teststring = Array.new(200,"water").join(" ")
+teststring2 = Array.new(300,"fire").join(" ")
+teststring3 = Array.new(550,"water").join(" ")
+teststring4 = (1..900).to_a.map! { |x| x.to_s}.join(" ")
+
+entry = DiaryEntry.new("title", teststring + teststring2)
+entry.reading_chunk(200, 1)
+

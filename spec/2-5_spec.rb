@@ -72,9 +72,10 @@ RSpec.describe DiaryEntry do
 
 
   teststring = Array.new(200,"water").join(" ")
-  teststring2 = Array.new(100,"water").join(" ")
+  teststring2 = Array.new(300,"fire").join(" ")
   teststring3 = Array.new(550,"water").join(" ")
   teststring4 = (1..900).to_a.map! { |x| x.to_s}.join(" ")
+  
 
   
   it "outputs one minute for 200 words at 200wpm" do
@@ -84,7 +85,7 @@ RSpec.describe DiaryEntry do
   end
 
   it "outputs one minute for 100 words at 200wpm" do
-    entry = DiaryEntry.new("title", teststring2)
+    entry = DiaryEntry.new("title", teststring)
     result = entry.reading_time(200)
     expect(result).to eq 1 
   end
@@ -96,26 +97,37 @@ RSpec.describe DiaryEntry do
   end
   
   # reading chunk tests 
-  # 1. for 1 min should return wpm number of words (try wpm = eg. 1, 300)
+  # 1. expect back a given chunk 
   # 2.1 to check next chunk, first chunk should not be part of second chunk 
   # 2.2 if next chunk reaches end, it should stop at the end 
   # 3. should output first chunk again after reaching the end 
 
-  it "for 1 min, outputs chunk of size = wpm" do 
-  entry = DiaryEntry.new("title", teststring3)
+  it "returns a specified chunk" do 
+  entry = DiaryEntry.new("title", teststring)
   result = entry.reading_chunk(200, 1)
-  expect(result.split(" ").length).to eq 200
+  expect(result).to eq teststring
   end
   
-  # 2.1
-  it "final 5 words of chunk1 + first 5 words of consecutive chunk = 10 word chunk starting 5 before the end of chunk1 " do
-    entry = DiaryEntry.new("title", teststring4)
-    chunk1 = reading_chunk(200, 2)
-    chunk2 = reading_chunk(200, 2)
-    last_5_of_chunk1 = chunk1[ (chunk1.length - 4), (chunk1.length + 1) ]
-    first_5_of_chunk2 = chunk2[0, 5]
-    # last_20_of_chunk1 == first_20_of_chunk2
+  # 2.1 - check that two consecutive chunks are returned perfectly as 2 consecutive chunks
+  # it "two consecutive chunks are returned correctly" do
+  #  entry = DiaryEntry.new("title", teststring4)
+  #   chunk1 = reading_chunk(200, 2)
+  #  chunk2 = reading_chunk(200, 2)
+  #  last_5_of_chunk1 = chunk1[ (chunk1.length - 4), (chunk1.length + 1) ]
+  #   first_5_of_chunk2 = chunk2[0, 5]
+  #    last_20_of_chunk1 == first_20_of_chunk2
+  # end
+
+  # 2.2 
+  it "goes from chunk to chunk" do 
+    entry = DiaryEntry.new("title", "#{teststring} #{teststring2}")
+    expect(entry.reading_chunk(200, 1)).to eq teststring
+    expect(entry.reading_chunk(300, 1)).to eq teststring2
   end
+
+  # 3 
+  # it "when reaching end of text, starts again at the begining" do 
+
 end
 
 
