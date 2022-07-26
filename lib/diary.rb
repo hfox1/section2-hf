@@ -43,25 +43,23 @@ class Diary
     # have available given their reading speed.
    # collection = {}
     winner = nil
-    distance = 100
+    distance = 1000
+    perfect_length = wpm * minutes
 
     @diary.each do |entry|
       word_count = entry.count_words
-      p entry 
-     # collection << [entry, entry.count_words]
-    
-      perfect_length = wpm * minutes
-      # if word_count <= perfect_length
-        
+      entry 
+    # collection << [entry, entry.count_words]
+      if word_count <= perfect_length 
         if distance >= perfect_length - word_count # distance = 100 // perfect_length = 3 // word_count = 2
           distance = perfect_length - word_count
           winner = entry
-
         end
-      # end
+      end
+
     end
 
-    p winner 
+    winner 
     
   end
 end
@@ -71,4 +69,5 @@ entry1 = DiaryEntry.new("Tuesday", "blah blah")
 entry2 = DiaryEntry.new("Wednesday", "bloo, blah, bloo, blah")
 diary.add(entry1)
 diary.add(entry2)
+p diary
 p diary.find_best_entry_for_reading_time(3,1)

@@ -39,7 +39,11 @@ it "returns the the best entry from specified time" do
   diary = Diary.new
   entry1 = DiaryEntry.new("Tuesday", "blah blah")
   entry2 = DiaryEntry.new("Wednesday", "bloo, blah, bloo, blah")
-  expect(diary.find_best_entry_for_reading_time(3,1)).to eq entry1
+  entry3 = DiaryEntry.new("Thursday", "bloo, blah, blah") 
+  diary.add(entry1)
+  diary.add(entry2)
+  diary.add(entry3)
+  expect(diary.find_best_entry_for_reading_time(3,1)).to eq entry3
 end
 
 
