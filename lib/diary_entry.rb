@@ -1,5 +1,7 @@
 class DiaryEntry
   def initialize(title, contents) # title, contents are strings
+    fail "Please enter text" if !title.is_a?(String) || !contents.is_a?(String)
+    fail "Please enter some content" if (title == "") || (contents == "")
     @title = title
     @contents = contents
   end
@@ -23,6 +25,7 @@ class DiaryEntry
                         # the number of words the user can read per minute
     # Returns an integer representing an estimate of the reading time in minutes
     # for the contents at the given wpm.
+    fail "Please enter an integer" if !wpm.is_a?(Integer)
   end
 
   def reading_chunk(wpm, minutes) # `wpm` is an integer representing the number

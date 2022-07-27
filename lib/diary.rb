@@ -7,6 +7,7 @@ class Diary
   end
 
   def add(entry) # entry is an instance of DiaryEntry
+    fail "Cannot add something that's not a diary entry!" if !entry.is_a?(DiaryEntry)
     # Returns nothing
     @diary << entry
   end
@@ -24,34 +25,23 @@ class Diary
       counter += entry.count_words
     end
     counter
-
   end
 
-  def reading_time(wpm) # wpm is an integer representing
-                        # the number of words the user can read per minute
-    # Returns an integer representing an estimate of the reading time in minutes
-    # if the user were to read all entries in the diary.
+  def reading_time(wpm) 
+    fail "please enter an integer" if wpm.empty? || !wpm.is_a?(Integer)
+    count_words / wpm
   end
 
   def find_best_entry_for_reading_time(wpm, minutes)
-        # `wpm` is an integer representing the number of words the user can read
-        # per minute.
-        # `minutes` is an integer representing the number of minutes the user
-        # has to read.
-    # Returns an instance of diary entry representing the entry that is closest 
-    # to, but not over, the length that the user could read in the minutes they
-    # have available given their reading speed.
-   # collection = {}
     winner = nil
-    distance = 1000
+    distance = 10000
     perfect_length = wpm * minutes
 
     @diary.each do |entry|
       word_count = entry.count_words
       entry 
-    # collection << [entry, entry.count_words]
       if word_count <= perfect_length 
-        if distance >= perfect_length - word_count # distance = 100 // perfect_length = 3 // word_count = 2
+        if distance >= perfect_length - word_count 
           distance = perfect_length - word_count
           winner = entry
         end
@@ -64,10 +54,10 @@ class Diary
   end
 end
 
-diary = Diary.new
-entry1 = DiaryEntry.new("Tuesday", "blah blah")
-entry2 = DiaryEntry.new("Wednesday", "bloo, blah, bloo, blah")
-diary.add(entry1)
-diary.add(entry2)
-p diary
-p diary.find_best_entry_for_reading_time(3,1)
+# diary = Diary.new
+# entry1 = DiaryEntry.new("Tuesday", "blah blah")
+# entry2 = DiaryEntry.new("Wednesday", "bloo, blah, bloo, blah")
+# diary.add(entry1)
+# diary.add(entry2)
+# p diary
+
