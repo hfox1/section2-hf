@@ -28,10 +28,6 @@ RSpec.describe TodoList do
     end
 
   end
-
-
-
-
-
+  
 end
 

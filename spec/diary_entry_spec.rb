@@ -18,7 +18,5 @@ RSpec.describe DiaryEntry do
       expect{ entry.reading_time([]) }.to raise_error "Please enter an integer"
     end
 
-
-    
   end
 end

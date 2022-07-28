@@ -31,7 +31,7 @@ I want to see a list of all of the mobile phone numbers in all my diary entries
 ## 2. Design the Class System
 
            ┌──────────────────────┐
-           │   Diary Reader       │
+           │   Diary Exerpt Class │
            │     init             │
            │                      │
       ┌────►                      │
@@ -63,63 +63,76 @@ I want to see a list of all of the mobile phone numbers in all my diary entries
 
 
 ```ruby
-class DiaryReader 
-  def initialize
+class DiaryExerpt
+  def initialize(diary) # diary is a diary object
   end 
   
-  def best_entry
+  def best_entry(time, wpm) # time and wpm are integers
+    # returns list of suitable DiaryEntry objects 
   end 
 end
 
 class Phonebook 
-  def initialize
+  def initialize(diary) # diary is a diary object
   end 
   
   def get_numbers
+    # returns a list of unique numbers (as string)
   end 
 end
 
 class Diary
   def initialize
+    # creates empty list
   end 
   
-  def add(diaryentry)
+  def add(entry) # entry is from class diaryentry
+    # adds entry into list 
+    # returns nothing 
   end 
 
   def view
+    # returns list of entry contents 
   end
 end
 
 class DiaryEntry
-  def initialize
+  def initialize(title, contents) # force these to be strings
   end 
   
   def title
+    # returns title of entry  
   end 
 
   def contents
+    # returns contents of entry  
   end
 
   def wordcount
+    # returns integer for length of contents 
   end
 end
 
 class TodoList
   def initialize
+    # initialize an empty list 
   end 
   
-  def add
+  def add(todo) # todo is a Todo object
+    # adds object from Todo class to list
   end 
 
   def view
+    # return list of task texts 
   end
 end
 
 class Todo
-  def initialize
+  def initialize(task) # task is a string
   end 
   
   def text
+    # returns the task text 
   end 
 end
 
@@ -131,9 +144,77 @@ _Create examples of the classes being used together in different situations and
 combinations that reflect the ways in which the system will be used._
 
 ```ruby
-# EXAMPLE
+# DIARYEXERPT *******************************
 
-# Gets all tracks
+# user story 3, find best entry
+diary = Diary.new 
+reader = DiaryExerpt.new(diary)
+entry1 = DiaryEntry.new("tue", "job")
+entry2 = DiaryEntry.new("wed", "job done")
+diary.add(entry1)
+diary.add(entry2)
+reader.best_entry(15, 5)
+# returns [entry2]
+
+it "best_entry asks for a non-empty diary when handed one" do
+  diary = Diary.new 
+  exerpts = DiaryExerpt.new(diary)
+  expect{ exerpts.best_entry(5,1) }.to raise_error "Please add some entries to the Diary"
+end
+
+it "new DiaryExerpt must take a diary" do 
+  expect{ DiaryExerpt.new("string") }.to raise_error "Please initialize from a diary"
+end
+
+
+# PHONEBOOK *******************************
+
+
+# phonebook returns list of numbers 
+diary = Diary.new 
+pbook = Phonebook.new(diary)
+entry1 = DiaryEntry.new("Tue", "07888888881, 07888888888")
+entry2 = DiaryEntry.new("wed", "07888888888")
+diary.add(entry1)
+diary.add(entry2)
+pbook.get_numbers
+# returns ["07888888881", "07888888888"]
+
+# DIARY *******************************
+# we can view entries in diary 
+diary = Diary.new 
+entry1 = DiaryEntry.new("Tue", "07888888881, 07888888888")
+entry2 = DiaryEntry.new("wed", "07888888888")
+diary.add(entry1)
+diary.add(entry2)
+diary.view 
+# returns ["07888888881, 07888888888", "07888888888"]
+
+it "add should return nothing" do 
+diary = Diary.new 
+entry1 = DiaryEntry.new("Tue", "07888888881, 07888888888")
+expect(diary.add(entry1)).to eq nil
+end
+
+
+
+
+# TODOLIST *******************************
+
+
+# view a todo added to todolist
+list = TodoList.new 
+task1 = Todo.new("wash baby")
+task2 = Todo.new("wash lady")
+list.add(task1)
+list.add(task2)
+list.view
+# returns ["wash baby", "wash lady"]
+
+it "adding a task returns nothing" do 
+  expect( list.add(task) ).to eq nil
+end 
+
 ...
 ```
 
@@ -143,11 +224,101 @@ _Create examples, where appropriate, of the behaviour of each relevant class at
 a more granular level of detail._
 
 ```ruby
-# EXAMPLE
+# DiaryExerpt, diary, phonebook, diaryentry, todolist, todo
 
-# Constructs a track
-track = Track.new("Carte Blanche", "Veracocha")
-track.title # => "Carte Blanche"
+# DIARYEXERPT -----------------
+
+# DIARY -----------------
+
+#  where should this go - the code will have need to know about the diaryentry class to run. try it and decide later
+it "returns error when adding non- diary entry" do 
+diary = Diary.new 
+expect{ diary.add("string") }.to raise_error "Please add a diary entry"
+end 
+
+it "View returns 'nothing to view' run on empty diary" do 
+  diary = Diary.new
+  expect(diary.view).to eq "Nothing to view!"
+end
+
+# PHONEBOOK -----------------
+
+it "requires diary class instance as init arg" do
+expect{ Phonebook.new("") }.to raise_error "Please init from a diary"
+end 
+
+it "get_numbers returns 'nothing to scrape' run on empty diary" do 
+  diary = Diary.new
+  pb = Phonebook.new(diary)
+  expect(pb.get_numbers).to eq "Nothing to scrape!"
+end
+
+# choose to ignore poss feature, "No numbers to be found in this diary" when get_numbers is given non-empty diary
+
+# DIARYENTRY -----------------
+
+context "errors" do 
+  it "initialize fails for non-string input" do 
+    expect{ DiaryEntry.new(5, "s") }.to raise_error "Please enter text"
+    expect{ DiaryEntry.new("s", 5) }.to raise_error "Please enter text"
+  end
+
+  it "initialize fails for empty string input" do 
+    expect{ DiaryEntry.new("title", "") }.to raise_error "Please enter some content"
+    expect{ DiaryEntry.new("", "contents") }.to raise_error "Please enter some content"
+  end
+end
+
+context "checking methods work" do 
+  entry1 = DiaryEntry.new("wind", "rain down on me")
+
+  it "title returns title of entry" do 
+  expect(entry1.title).to eq "wind"
+  end
+
+  it "contents returns contents of entry" do 
+  expect(entry1.contents).to eq "rain down on me"
+  end
+ 
+  it "wordcount returns integer for length of contents" do 
+  expect(entry1.wordcount).to eq 4
+  end
+end
+
+# TODOLIST -----------------
+
+it "fails trying to add a non-todo" do 
+  expect{ list.add("bath cat") }.to raise_error "Please add a todo"
+end  
+
+context "checking methods on a empty Todolist" do 
+  list = TodoList.new
+
+# view blank to do list 
+  it "viewing blank todolist returns empty list" do 
+    expect(list.view).to eq []
+  end
+end
+
+# TODO -----------------
+
+it "fails for non-string init" do 
+  expect{ Todo.new([]) }.to raise_error "Please input some text"
+  expect{ Todo.new(5) }.to raise_error "Please input some text"
+  expect{ Todo.new({}) }.to raise_error "Please input some text"
+end
+
+it "initializing inputting empty-string fails" do 
+  expect{ Todo.new("") }.to raise_error "Please input some text"
+end
+
+it ".text returns task text" do 
+task = Todo.new("wash car")
+expect(task.text).to eq "wash car"
+end 
+
+
+
 ```
 
 _Encode each example as a test. You can add to the above list as you go._
