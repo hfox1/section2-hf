@@ -50,4 +50,14 @@ RSpec.describe "Todo and TodoList integration" do
     expect( list.incomplete ).to eq []
   end
 
+  # from 2.9 
+  it "view a todo added to todolist" do
+    list = TodoList.new 
+    task1 = Todo.new("wash baby")
+    task2 = Todo.new("wash lady")
+    list.add(task1)
+    list.add(task2)
+    expect(list.view).to eq ["wash baby", "wash lady"]
+  end
+
 end
