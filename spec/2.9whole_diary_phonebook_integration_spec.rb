@@ -66,7 +66,7 @@ RSpec.describe "Phonebook, DiaryExerpt, Diary & DiaryEntry Integration" do
   end
 
   context "testing Phonebook and get_numbers" do
-   xit "returns a number from an entry (in a list)" do 
+   it "returns a number from an entry (in a list)" do 
       diary = Diary.new 
       pbook = Phonebook.new(diary)
       entry1 = DiaryEntry.new("Tue", "07888888881")
@@ -74,7 +74,7 @@ RSpec.describe "Phonebook, DiaryExerpt, Diary & DiaryEntry Integration" do
       expect(pbook.get_numbers).to eq ["07888888881"]
     end
     
-    xit "get_numbers returns numbers from 2 messages in a list" do 
+    it "get_numbers returns numbers from 2 messages in a list" do 
       diary = Diary.new 
       pbook = Phonebook.new(diary)
       entry1 = DiaryEntry.new("Tue", "07888888881")
@@ -84,11 +84,11 @@ RSpec.describe "Phonebook, DiaryExerpt, Diary & DiaryEntry Integration" do
       expect(pbook.get_numbers).to eq ["07888888881", "07888888888"]
     end
     
-    xit "get_numbers returns unique numbers in a list" do 
+    it "get_numbers returns unique numbers in a list" do 
       diary = Diary.new 
       pbook = Phonebook.new(diary)
-      entry1 = DiaryEntry.new("Tue", "07888888881, 07888888888")
-      entry2 = DiaryEntry.new("wed", "07888888888")
+      entry1 = DiaryEntry.new("Tue", "07888888881,, 07888888888, words")
+      entry2 = DiaryEntry.new("wed", "07888888888 is my friend")
       diary.add(entry1)
       diary.add(entry2)
       expect(pbook.get_numbers).to eq ["07888888881", "07888888888"]
@@ -97,19 +97,21 @@ RSpec.describe "Phonebook, DiaryExerpt, Diary & DiaryEntry Integration" do
   end
 
   context "testing diary & diary entry integration"
-    xit "we can view entries in diary" do 
+    it "we can view entries in diary" do 
+      diary = Diary.new
       entry1 = DiaryEntry.new("Tue", "07888888881, 07888888888")
       entry2 = DiaryEntry.new("wed", "07888888888")
       diary.add(entry1)
       diary.add(entry2)
-      diary = Diary.new 
       expect(diary.view).to eq [["Tue", "07888888881, 07888888888"], ["wed", "07888888888"]]
     end
 
-    xit "add should return nothing" do 
+    it "add should return nothing" do 
       diary = Diary.new 
       entry1 = DiaryEntry.new("Tue", "07888888881, 07888888888")
       expect(diary.add(entry1)).to eq nil
       end
   end    
+
+
 

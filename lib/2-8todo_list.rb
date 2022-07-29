@@ -9,6 +9,10 @@ class TodoList
     return
   end
 
+  def view
+    @list.map { |todo| todo.task }
+  end
+
   def incomplete
     # Returns all non-done todos
     @list.reject(&:done?)

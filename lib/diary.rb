@@ -10,11 +10,19 @@ class Diary
     fail "Cannot add something that's not a diary entry!" if !entry.is_a?(DiaryEntry)
     # Returns nothing
     @diary << entry
+    return
   end
 
   def all
     # Returns a list of instances of DiaryEntry
     @diary
+  end
+
+  def view
+    # returns all entries in readable [title, contents] pairs 
+    if @diary == [] ; return "nothing to view!"
+    end
+    @diary.map { |entry| a = entry.title ; b = entry.contents ; [a, b]}
   end
 
   def count_words

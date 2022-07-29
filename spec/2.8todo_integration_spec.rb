@@ -60,4 +60,12 @@ RSpec.describe "Todo and TodoList integration" do
     expect(list.view).to eq ["wash baby", "wash lady"]
   end
 
+  context "checking methods on a empty Todolist" do 
+    list = TodoList.new
+  
+  # view blank to do list 
+    it "viewing blank todolist returns empty list" do 
+      expect(list.view).to eq []
+    end
+  end
 end
